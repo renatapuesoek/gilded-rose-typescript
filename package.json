@@ -5,6 +5,7 @@
   "main": "fixture.js",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "fixture": "ts-node fixture.ts"
   },
   "author": "Attila Kerekes",
