@@ -38,6 +38,22 @@ function isSulfuras(item: Item) {
   return item.name == ITEMNAME_SULFURAS;
 }
 
+function decreaseQuality(item: Item) {
+  if (item.quality > QUALITY_MINIMUM) {
+    item.quality -= 1;
+  }
+}
+
+function increaseQuality(item: Item) {
+  if (item.quality < QUALITY_MAXIMUM) {
+    item.quality += 1;
+  }
+}
+
+function isExpired(item: Item) {
+  return item.sellIn < SELLIN_EXPIRED;
+}
+
 export class Shop {
   items: Item[];
 
@@ -51,40 +67,29 @@ export class Shop {
         return
       }
       if (!isCheese(item) && !isBackstagePass(item)) {
-        if (item.quality > QUALITY_MINIMUM) {
-          item.quality -= 1;
-        }
+        decreaseQuality(item);
       } else {
         if (item.quality < QUALITY_MAXIMUM) {
           item.quality += 1;
           if (isBackstagePass(item)) {
             if (item.sellIn <= BACKSTAGE_FIRST_INCREASE) {
-              if (item.quality < QUALITY_MAXIMUM) {
-                item.quality += 1;
-              }
+              increaseQuality(item);
             }
             if (item.sellIn <= BACKSTAGE_SECOND_INCREASE) {
-              if (item.quality < QUALITY_MAXIMUM) {
-                item.quality += 1;
-              }
+              increaseQuality(item);
             }
           }
         }
       }
       item.sellIn -= 1;
-      if (item.sellIn < SELLIN_EXPIRED) {
-        if (!isCheese(item)) {
-          if (!isBackstagePass(item)) {
-            if (item.quality > QUALITY_MINIMUM) {
-              item.quality -= 1;
-            }
-          } else {
-            item.quality = QUALITY_MINIMUM;
-          }
+      if (isExpired(item)) {
+        if (isCheese(item)) {
+          increaseQuality(item);
+        } else if (isBackstagePass(item)) {
+          item.quality = QUALITY_MINIMUM;
         } else {
-          if (item.quality < QUALITY_MAXIMUM) {
-            item.quality += 1;
-          }
+          // normal item
+          decreaseQuality(item);
         }
       }
     });
