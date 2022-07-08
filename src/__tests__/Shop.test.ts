@@ -1,4 +1,5 @@
-import { Shop, Item } from '../gilded_rose';
+import { Shop} from '../Shop';
+import {Item} from "../Item";
 
 describe("Shop#updateQuality()", () => {
     describe("normal item", () => {

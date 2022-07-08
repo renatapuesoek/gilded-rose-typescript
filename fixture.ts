@@ -1,4 +1,5 @@
-import { Item, Shop } from './src/gilded_rose';
+import { Shop } from './src/Shop';
+import {Item} from "./src/Item";
 
 const items = [];
 
